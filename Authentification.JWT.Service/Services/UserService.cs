@@ -65,5 +65,14 @@ namespace Authentification.JWT.Service.Services
 
             return isValid;
         }
+        public async Task<UserDto?> AuthenticateAsync(string username, string password)
+        {
+            var user = await userRepository.GetUserByUsernameAsync(username);
+            if (user == null) return null;
+
+            var isValid = PasswordHasher.VerifyPassword(password, user.PasswordHash);
+            return isValid ? mapper.Map<UserDto>(user) : null;
+        }
+
     }
 }

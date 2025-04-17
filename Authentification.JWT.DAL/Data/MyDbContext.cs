@@ -9,7 +9,7 @@ namespace Authentification.JWT.DAL.Data
 
         public DbSet<User> Users { get; set; }
 
-        // configuring sql server and set the migrations assembly
+        // setting migrations assembly
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

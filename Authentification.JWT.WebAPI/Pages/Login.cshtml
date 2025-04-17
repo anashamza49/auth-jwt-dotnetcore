@@ -1,0 +1,40 @@
+﻿@page "/Login"
+@model Authentification.JWT.WebAPI._Pages.LoginModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<link rel="stylesheet" href="~/css/login.css" />
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <h2>Sign in to your account to continue</h2>
+            <div class="login-decoration"></div>
+        </div>
+        <div class="login-form-container">
+            <form method="post" >
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <div class="floating-input">
+                        <input asp-for="Login.Username" class="form-control" placeholder="" />
+                        <label asp-for="Login.Username"></label>
+                    </div>
+                    <span asp-validation-for="Login.Username" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="floating-input">
+                        <input asp-for="Login.Password" class="form-control" type="password" placeholder="" />
+                        <label asp-for="Login.Password"></label>
+                    </div>
+                    <span asp-validation-for="Login.Password" class="text-danger"></span>
+                </div>
+
+                <input type="submit" value="sign" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+</div>

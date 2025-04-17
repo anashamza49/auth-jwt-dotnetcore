@@ -7,40 +7,42 @@ using Authentification.JWT.Service.Interfaces;
 using Authentification.JWT.Service.Services;
 using Authentification.JWT.Service.Mappings;
 using Authentification.JWT.DAL.Repositories;
-using Authentification.JWT.WebAPI.Middlewares;
 using NLog.Web;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// config NLog
+builder.Services.AddRazorPages()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
+            _ => "Le champ est requis.");
+    });
+
+
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
-// Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// config du db avec migrations vers DAL
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         x => x.MigrationsAssembly("Authentification.JWT.DAL")));
 
-// config des repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-// config des services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
-
-// config AutoMapper
 builder.Services.AddAutoMapper(typeof(AuthProfile));
 
-// Configuration JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -54,7 +56,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Configuration Swagger avec authentification
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "JWT API", Version = "v1" });
@@ -77,7 +78,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// creation des dossiers (if doesn't exist)
 var logDir = Path.Combine(Directory.GetCurrentDirectory(), "logs");
 Directory.CreateDirectory(Path.Combine(logDir, "all"));
 Directory.CreateDirectory(Path.Combine(logDir, "errors"));
@@ -86,19 +86,21 @@ var app = builder.Build();
 
 NLog.Common.InternalLogger.LogToConsole = true;
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseHttpsRedirection();
+app.UseExceptionHandler("/error");
+
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+
+app.MapRazorPages();
 
 app.Run();
