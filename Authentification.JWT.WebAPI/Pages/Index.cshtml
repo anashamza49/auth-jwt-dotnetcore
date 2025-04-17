@@ -1,4 +1,65 @@
 ﻿@page
 @model Authentification.JWT.WebAPI.Pages.IndexModel
-@{
-}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<link rel="stylesheet" href="~/css/register.css" />
+
+<div class="dashboard-container">
+    <div class="dashboard-card">
+        <div class="dashboard-header">
+            <div class="user-welcome">
+                <div class="user-avatar">
+                    <span>@(User.Identity?.Name?[0].ToString().ToUpper() ?? "U")</span>
+                </div>
+                <div class="welcome-text">
+                    <h1>Bienvenue, @User.Identity?.Name!</h1>
+                    <p>Vous êtes maintenant connecté à votre tableau de bord sécurisé.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <h3>Activité</h3>
+                        <p>Dernière connexion: aujourd'hui</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔔</div>
+                    <div class="stat-info">
+                        <h3>Notifications</h3>
+                        <p>Vous avez 0 notifications</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-info">
+                        <h3>Tâches</h3>
+                        <p>Aucune tâche en attente</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-container">
+                <h2>Actions Rapides</h2>
+                <div class="actions">
+                    <a asp-page="/Profile" class="btn btn-primary">
+                        <span class="btn-icon">👤</span>
+                        <span class="btn-text">Mon Profil</span>
+                    </a>
+                    <a asp-page="/Settings" class="btn btn-secondary">
+                        <span class="btn-icon">⚙️</span>
+                        <span class="btn-text">Paramètres</span>
+                    </a>
+                    <a asp-page="/Logout" class="btn btn-danger">
+                        <span class="btn-icon">🚪</span>
+                        <span class="btn-text">Se déconnecter</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

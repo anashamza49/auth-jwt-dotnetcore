@@ -1,6 +1,52 @@
-﻿@page
+﻿@page "/Register"
 @model Authentification.JWT.WebAPI._Pages.RegisterModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<div>
 
+<link rel="stylesheet" href="~/css/register.css" asp-append-version=true/>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>Create Account</h1>
+            <h2>Join us by creating your new account</h2>
+            <div class="login-decoration"></div>
+        </div>
+        <div class="login-form-container">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <div class="floating-input">
+                        <input asp-for="Register.Username" class="form-control" placeholder=" " />
+                        <label asp-for="Register.Username"></label>
+                    </div>
+                    <span asp-validation-for="Register.Username" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="floating-input">
+                        <input asp-for="Register.Email" class="form-control" placeholder=" " />
+                        <label asp-for="Register.Email"></label>
+                    </div>
+                    <span asp-validation-for="Register.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="floating-input">
+                        <input asp-for="Register.Password" class="form-control" type="password" placeholder=" " />
+                        <label asp-for="Register.Password"></label>
+                    </div>
+                    <span asp-validation-for="Register.Password" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create Account</button>
+
+                <div class="login-footer">
+                    <p>Already have an account? <a href="/Login">Sign in</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
